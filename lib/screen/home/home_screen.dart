@@ -11,6 +11,7 @@ import 'package:paynow/constants/route_constants.dart';
 import 'package:paynow/utils/app_colors.dart';
 import 'package:paynow/utils/responsive_helper.dart';
 import 'package:paynow/widget/custom_text.dart';
+import 'package:paynow/widget/motion/tilt_3d_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -187,122 +188,126 @@ class HomeScreen extends StatelessWidget {
         final bool isFrozen = state is WalletLoaded ? state.isCardFrozen : false;
         final double balance = state is WalletLoaded ? state.balance : 12450.85;
 
-        return Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(Responsive.w(20)),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                gradient: LinearGradient(
-                  colors: isFrozen
-                      ? [const Color(0xFF6B7280), const Color(0xFF374151)] // Greyed out color when frozen
-                      : [AppColors.primaryGradientStart, AppColors.primaryGradientEnd],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+        return Tilt3DCard(
+          borderRadius: BorderRadius.circular(24),
+          onTap: () => Navigator.pushNamed(context, RouteConstants.cardDetails),
+          child: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(Responsive.w(20)),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  gradient: LinearGradient(
+                    colors: isFrozen
+                        ? [const Color(0xFF6B7280), const Color(0xFF374151)] // Greyed out color when frozen
+                        : [AppColors.primaryGradientStart, AppColors.primaryGradientEnd],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: (isFrozen ? Colors.grey : AppColors.primaryGradientEnd).withValues(alpha: 0.3),
+                      blurRadius: 15,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: (isFrozen ? Colors.grey : AppColors.primaryGradientEnd).withValues(alpha: 0.3),
-                    blurRadius: 15,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText.body(
-                        'Main Wallet Balance',
-                        color: AppColors.white.withValues(alpha: 0.8),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: Responsive.w(8), vertical: Responsive.h(4)),
-                        decoration: BoxDecoration(
-                          color: AppColors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText.body(
+                          'Main Wallet Balance',
+                          color: AppColors.white.withValues(alpha: 0.8),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
                         ),
-                        child: CustomText.body(
-                          isFrozen ? 'FROZEN' : 'PREMIUM',
-                          color: AppColors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: Responsive.w(8), vertical: Responsive.h(4)),
+                          decoration: BoxDecoration(
+                            color: AppColors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: CustomText.body(
+                            isFrozen ? 'FROZEN' : 'PREMIUM',
+                            color: AppColors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: Responsive.h(8)),
-                  CustomText.header(
-                    'Rs ${balance.toStringAsFixed(2)}',
-                    color: AppColors.white,
-                    fontSize: 30,
-                  ),
-                  SizedBox(height: Responsive.h(32)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText.body(
-                            'CARD HOLDER',
-                            color: AppColors.white.withValues(alpha: 0.7),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          SizedBox(height: Responsive.h(4)),
-                          CustomText.title(
-                            'ALEXANDER PAYNE',
-                            color: AppColors.white,
-                            fontSize: 12,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText.body(
-                            'EXPIRES',
-                            color: AppColors.white.withValues(alpha: 0.7),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          SizedBox(height: Responsive.h(4)),
-                          CustomText.title(
-                            '08/28',
-                            color: AppColors.white,
-                            fontSize: 12,
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            if (isFrozen)
-              Positioned(
-                right: 20,
-                bottom: 20,
-                child: Container(
-                  padding: EdgeInsets.all(Responsive.w(8)),
-                  decoration: const BoxDecoration(
-                    color: Colors.white24,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.lock,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+                      ],
+                    ),
+                    SizedBox(height: Responsive.h(8)),
+                    CustomText.header(
+                      'Rs ${balance.toStringAsFixed(2)}',
+                      color: AppColors.white,
+                      fontSize: 30,
+                    ),
+                    SizedBox(height: Responsive.h(32)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText.body(
+                              'CARD HOLDER',
+                              color: AppColors.white.withValues(alpha: 0.7),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            SizedBox(height: Responsive.h(4)),
+                            CustomText.title(
+                              'ALEXANDER PAYNE',
+                              color: AppColors.white,
+                              fontSize: 12,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText.body(
+                              'EXPIRES',
+                              color: AppColors.white.withValues(alpha: 0.7),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            SizedBox(height: Responsive.h(4)),
+                            CustomText.title(
+                              '08/28',
+                              color: AppColors.white,
+                              fontSize: 12,
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
-          ],
+              if (isFrozen)
+                Positioned(
+                  right: 20,
+                  bottom: 20,
+                  child: Container(
+                    padding: EdgeInsets.all(Responsive.w(8)),
+                    decoration: const BoxDecoration(
+                      color: Colors.white24,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.lock,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         );
       },
     );

@@ -1,6 +1,7 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:paynow/utils/app_colors.dart';
 import 'package:paynow/widget/custom_text.dart';
+import 'package:paynow/widget/motion/tilt_3d_card.dart';
 
 class WalletSummaryCard extends StatefulWidget {
   final String balance;
@@ -25,7 +26,9 @@ class _WalletSummaryCardState extends State<WalletSummaryCard> {
   Widget build(BuildContext context) {
     final displayedBalance = _isHidden ? '••••••••' : widget.balance;
 
-    return Container(
+    return Tilt3DCard(
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -123,6 +126,7 @@ class _WalletSummaryCardState extends State<WalletSummaryCard> {
           ),
         ],
       ),
-    );
+    ),
+  );
   }
 }
